@@ -2,7 +2,7 @@ import asyncio
 import os
 import time
 import logging
-from google import genai
+import google.generativeai as genai
 from google.genai import types
 logging.basicConfig(
     level=logging.INFO,
