@@ -1,0 +1,13 @@
+streamlit
+langchain
+langchain-community
+langchain-core
+langchain-openai
+langchain-tavily
+langgraph
+transformers
+torch
+numpy
+tiktoken
+openai
+tavily-python
