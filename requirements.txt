@@ -1,6 +1,6 @@
 streamlit
-langchain>=0.3.20
-langchain-community>=0.3.20
+langchain~=0.3.27
+langchain-community~=0.4
 langchain-tavily
 langgraph
 transformers
