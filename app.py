@@ -21,7 +21,7 @@ import html
 
 # --- LangChain & AI Imports ---
 from langchain.agents import AgentExecutor, create_react_agent
-from langchain_classic import hub
+from langchain import hub
 from langchain_community.chat_models import ChatOpenAI
 from openai import OpenAI
 from tavily import TavilyClient
