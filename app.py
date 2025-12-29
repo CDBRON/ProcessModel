@@ -996,64 +996,55 @@ def run_workflow_logic(user_request, modelscope_key, tavily_key, classifier_path
     # 6. 构建 Aligner Sub-Graph (粒度对齐)
     def critique_node(state: GraphState) -> dict:
         print("\n--- [ALIGNER] Critiquing ---")
-        # 获取当前的 JSON 数据
         current_json = state.processed_json
         raw_activities = current_json.get("activities", [])
-
-        # --- 【修复开始】数据标准化：防止 activities 是字符串列表 ---
+        
+        # --- 数据标准化 ---
         normalized_activities = []
         is_modified = False
-
         for idx, act in enumerate(raw_activities):
             if isinstance(act, str):
-                # 如果是字符串，将其包装成字典
-                print(f"  [Warning] Found string activity, normalizing: {act[:20]}...")
                 normalized_activities.append({"id": f"act_norm_{idx}", "description": act})
                 is_modified = True
             elif isinstance(act, dict):
-                # 如果已经是字典，直接保留
                 normalized_activities.append(act)
-            else:
-                # 其他非法类型跳过
-                continue
-
-        # 如果数据被修正过，更新 current_json 中的 activities
-        if is_modified:
-            current_json["activities"] = normalized_activities
-
-        # 使用标准化后的列表进行后续处理
+        if is_modified: current_json["activities"] = normalized_activities
         acts = normalized_activities
-        # --- 【修复结束】 ---
-
+        
         to_refine = []
+        
+        # --- 检查模型是否加载 ---
+        if activity_classifier_pipeline is None:
+            print("!!! [DEBUG] Pipeline is None! Using default 'Standard'. (Model failed to load) !!!")
+        else:
+            print(f"--- [DEBUG] Pipeline is loaded. Model: {activity_classifier_pipeline.model.name_or_path} ---")
+
         for act in acts:
             desc = act.get("description", "")
-            # 容错处理：如果 description 为空，跳过
-            if not desc:
-                continue
-
-            # 提取动作文本（去除角色前缀）
+            if not desc: continue
+            
+            # 提取动作文本
             action_text = desc.split(":", 1)[1].strip() if ":" in desc else desc
-
+            
             label = "Standard"
+            
             if activity_classifier_pipeline:
                 try:
-                    # 截断过长的文本防止模型报错
+                    # 调用模型
                     res = activity_classifier_pipeline(action_text[:512])
                     label = res[0]['label']
+                    score = res[0]['score']
+                    # --- 【关键修改】打印每一个预测结果 ---
+                    print(f"  [Check] '{action_text[:30]}...' -> {label} (Conf: {score:.2f})")
                 except Exception as e:
                     print(f"  [Classifier Error] {e}")
                     label = "Standard"
-
+            
             if label != "Standard":
-                print(f"  - Issue: {desc} -> {label}")
+                print(f"  -> FOUND ISSUE: {desc} is {label}")
                 to_refine.append({"activity": act, "granularity": label})
-
-        # 返回结果。如果数据被修正了，同时更新 processed_json 状态，防止下一步报错
-        return {
-            "activities_to_refine": to_refine,
-            "processed_json": current_json
-        }
+                
+        return {"activities_to_refine": to_refine, "processed_json": current_json}
 
     def refine_node(state: GraphState) -> dict:
         print("\n--- [ALIGNER_NODE] Refining Activities (1-to-1 Standardization) ---")
