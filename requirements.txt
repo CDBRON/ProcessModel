@@ -1,11 +1,9 @@
 streamlit
-# --- 核心修复：全员对齐到 0.3.20 ---
-# 满足 langchain-tavily 对 >=0.3.20 的要求
-langchain==0.3.20
-# 锁定 community 防止它跳到 0.4 导致冲突
-langchain-community==0.3.20
-# 让 pip 自动匹配核心库，不要手动锁死，防止出错
-langchain-core
+# --- 核心修复：使用范围约束，允许微调，但严禁升级到 0.4 ---
+# 允许安装 0.3.21 及以上，但绝对不要 0.4.0
+langchain>=0.3.21,<0.4.0
+langchain-community>=0.3.21,<0.4.0
+langchain-core>=0.3.21,<0.4.0
 # 配合的 tavily 版本
 langchain-tavily==0.2.0
 langgraph
