@@ -1,14 +1,21 @@
-streamlit~=1.52.2
-langchain~=0.3.27
-langchain-community~=0.4
-langchain-core~=0.3.79
-openai~=2.6.1
-tavily-python~=0.7.12
-transformers~=4.57.1
-langgraph~=1.0.1
-tiktoken~=0.12.0
-numpy~=2.3.4
-networkx~=3.5
-pydot~=4.0.1
-lxml~=6.0.2
-graphviz~=0.21
+streamlit
+# --- LangChain 0.3 黄金兼容组合 ---
+# 必须严格锁死版本，防止 pip 自动下载不兼容的新版
+langchain==0.3.14
+langchain-community==0.3.14
+langchain-core==0.3.29
+langchain-text-splitters==0.3.5
+langchain-tavily==0.2.0
+langgraph==0.2.60
+
+# --- 其他依赖 ---
+transformers
+torch
+numpy
+tiktoken
+openai
+tavily-python
+networkx
+lxml
+pydot
+graphviz
