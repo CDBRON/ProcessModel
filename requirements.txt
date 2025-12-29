@@ -1,14 +1,21 @@
 streamlit
-langchain
-langchain-community
-langchain-core
+# --- 回退到 LangChain 0.2 稳定版 ---
+langchain==0.2.16
+langchain-community==0.2.16
+langchain-core==0.2.38
+langchain-text-splitters==0.2.4
+# 注意：必须用 0.1.x 版本的 tavily 才能配合 langchain 0.2
+langchain-tavily==0.1.2
+langgraph==0.2.16
+
+# --- 其他依赖 ---
+transformers
+torch
+numpy
+tiktoken
 openai
 tavily-python
-transformers
-langgraph
-tiktoken
-numpy
 networkx
-pydot
 lxml
+pydot
 graphviz
