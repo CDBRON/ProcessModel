@@ -1,11 +1,11 @@
 streamlit
-# --- LangChain 0.2 稳定版全家桶 ---
+# --- LangChain 0.2 稳定版 ---
 langchain==0.2.16
 langchain-community==0.2.16
 langchain-core==0.2.38
 langchain-text-splitters==0.2.4
-# 修正点：使用存在的 0.1.6 版本，它兼容 LangChain 0.2
-langchain-tavily==0.1.6
+# 关键修改：去掉版本号，让 pip 自动寻找兼容 0.2 的版本 (它会自动降级到 0.1.5)
+langchain-tavily
 langgraph==0.2.16
 
 # --- 其他依赖 ---
