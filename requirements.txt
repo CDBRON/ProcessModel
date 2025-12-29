@@ -1,12 +1,14 @@
 streamlit
-# --- LangChain 0.2 稳定版 ---
-langchain==0.2.16
-langchain-community==0.2.16
-langchain-core==0.2.38
-langchain-text-splitters==0.2.4
-# 关键修改：去掉版本号，让 pip 自动寻找兼容 0.2 的版本 (它会自动降级到 0.1.5)
-langchain-tavily
-langgraph==0.2.16
+# --- 核心修复：全员对齐到 0.3.20 ---
+# 满足 langchain-tavily 对 >=0.3.20 的要求
+langchain==0.3.20
+# 锁定 community 防止它跳到 0.4 导致冲突
+langchain-community==0.3.20
+# 让 pip 自动匹配核心库，不要手动锁死，防止出错
+langchain-core
+# 配合的 tavily 版本
+langchain-tavily==0.2.0
+langgraph
 
 # --- 其他依赖 ---
 transformers
